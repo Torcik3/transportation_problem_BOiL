@@ -42,6 +42,9 @@ class PosrednikApp:
         self.o_entry.grid(row=0, column=3, padx=5)
 
         ttk.Button(self.form_frame, text="Generuj pola", command=self.generate_fields).grid(row=0, column=4, padx=10)
+        ttk.Button(self.form_frame, text="Wczytaj dane przykładowe", command=self.load_example_data).grid(row=0, column=5,
+                                                                                                     padx=10)
+
 
     def validate_integer(self, entry, name):
         val = entry.get()
@@ -55,6 +58,32 @@ class PosrednikApp:
             messagebox.showerror("Błąd", f"{name} musi być nieujemną liczbą całkowitą.")
             entry.configure(background='salmon')
             return False
+
+    def load_example_data(self):
+        # Ustaw liczbę dostawców i odbiorców
+        self.d_entry.delete(0, tk.END)
+        self.d_entry.insert(0, "2")
+        self.o_entry.delete(0, tk.END)
+        self.o_entry.insert(0, "3")
+
+        # Wygeneruj pola
+        self.generate_fields()
+
+        # Wypełnij dane z przykładu
+        example_values = {
+            "D1_supply": 20, "D1_cost": 10,
+            "D2_supply": 30, "D2_cost": 12,
+            "O1_demand": 10, "O1_price": 30,
+            "O2_demand": 28, "O2_price": 25,
+            "O3_demand": 27, "O3_price": 30,
+            "D1_O1": 8, "D1_O2": 14, "D1_O3": 17,
+            "D2_O1": 12, "D2_O2": 9, "D2_O3": 19,
+        }
+
+        for key, value in example_values.items():
+            if key in self.entries:
+                self.entries[key].delete(0, tk.END)
+                self.entries[key].insert(0, str(value))
 
     def generate_fields(self):
         if not self.validate_integer(self.d_entry, "Liczba dostawców"):
